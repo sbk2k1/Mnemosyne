@@ -9,9 +9,15 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import sys
 
 class Ui_MainWindow(object):
+
+    demarcation = "O̲ppa̲ (っ-̶●̃益●̶̃)っ ,︵‿ S̲t̲yl̲e̲"
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(900, 600)
@@ -307,6 +313,9 @@ class Ui_MainWindow(object):
         self.upate_btn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
         self.delete_btn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(3))
 
+
+        self.create_save.clicked.connect(lambda: self.create_mnemo())
+
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -329,7 +338,25 @@ class Ui_MainWindow(object):
         self.upate_btn.setText(_translate("MainWindow", "Update"))
         self.delete_btn.setText(_translate("MainWindow", "Delete"))
 
+    def create_mnemo(self):
+        date= self.create_date.text()
+        time= self.create_time.text()
+        notification= self.create_text.toPlainText()
+        if date == "" or time == "" or notification == "":
+            self.error_dialog = QtWidgets.QErrorMessage()
+            self.error_dialog.showMessage('You cannot provide empty values.')
+        else:
+            self.create_date.setDate(QDate(2001, 12,19))
+            self.create_time.setTime(QTime(13, 37))
+            self.create_text.setText("Your Mnemo has been created!")
+            #implement saving logic after this
+            print("Date: ", date)
+            print("Time: ", time)
+            print("Notification: ", notification)
 
+    def update_mnemo(self):
+        pass
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

@@ -21,6 +21,10 @@ class Ui_MainWindow(object):
     demarcation = "Einstein was right. Time is relative to the observer. When you're looking down the barrel of a gun time slows down, your whole life flashes by, heartbreak and scars. Stay with it, and you can live a lifetime in that split second."
     update_file=""
     delete_files=[]
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -372,7 +376,7 @@ class Ui_MainWindow(object):
             self.create_text.setText("Your Mnemo has been created!")
             text = str(date+ self.demarcation+ time+ self.demarcation+ notification)
             name = str(date)+"_"+str(time.replace(":","-"))
-            path=str(os.path.join(os.path.dirname(__file__), ''))
+            path=str(os.path.join(self.application_path, ''))
             path = path+"Mnemos\\"+name+'.txt'
             path= path.replace("\\","/")
             with open(path, 'w') as f:
@@ -381,7 +385,7 @@ class Ui_MainWindow(object):
 
     def select_file(self):
         try:
-            path=str(os.path.join(os.path.dirname(__file__), ''))
+            path=str(os.path.join(self.application_path, ''))
             path = path+"Mnemos"
             path= path.replace("\\","/")
             filename= QtWidgets.QFileDialog.getOpenFileName(directory=path, filter="All files (*.*);;Text files (.txt)")
@@ -421,7 +425,7 @@ class Ui_MainWindow(object):
                 self.update_text.setText("Your Mnemo has been updated!")
                 text = str(date+ self.demarcation+ time+ self.demarcation+ notification)
                 name = str(date)+"_"+str(time.replace(":","-"))
-                path=str(os.path.join(os.path.dirname(__file__), ''))
+                path=str(os.path.join(self.application_path, ''))
                 path = path+"Mnemos\\"+name+'.txt'
                 path= path.replace("\\","/")
                 with open(path, 'w') as f:
@@ -430,7 +434,7 @@ class Ui_MainWindow(object):
         
     def select_files(self):
         try:
-            path=str(os.path.join(os.path.dirname(__file__), ''))
+            path=str(os.path.join(self.application_path, ''))
             path = path+"Mnemos"
             path= path.replace("\\","/")
             filename= QtWidgets.QFileDialog.getOpenFileNames(directory=path, filter="All files (*.*);;Text files (.txt)")

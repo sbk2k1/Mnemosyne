@@ -19,6 +19,8 @@ import os
 class Ui_MainWindow(object):
 
     demarcation = "Einstein was right. Time is relative to the observer. When you're looking down the barrel of a gun time slows down, your whole life flashes by, heartbreak and scars. Stay with it, and you can live a lifetime in that split second."
+    update_file=""
+    delete_files=[]
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -310,6 +312,12 @@ class Ui_MainWindow(object):
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
+        
+
+
+        #My Code
+
+        #1
 
         self.create_btn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.upate_btn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
@@ -318,8 +326,14 @@ class Ui_MainWindow(object):
 
         self.create_save.clicked.connect(lambda: self.create_mnemo())
 
+        #2
+
+        self.update_select.clicked.connect(lambda: self.select_file())
+        self.update_save.clicked.connect(lambda: self.update_mnemo())
+
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -360,9 +374,55 @@ class Ui_MainWindow(object):
                 f.write(text)
                 f.close()
 
+    def select_file(self):
+        try:
+            path=str(os.path.join(os.path.dirname(__file__), ''))
+            path = path+"Mnemos"
+            path= path.replace("\\","/")
+            filename= QtWidgets.QFileDialog.getOpenFileName(directory=path, filter="All files (*.*);;Text files (.txt)")
+            self.update_file=filename[0]
+            with open(filename[0], 'r') as f:
+                text = f.read()
+                f.close()
+            text = text.split(self.demarcation)
+            date= text[0].split("-")
+            time= text[1].split(":")
+            self.update_date.setDate(QDate(int(date[2]), int(date[1]), int(date[0])))
+            self.update_time.setTime(QTime(int(time[0]), int(time[1])))
+            self.update_text.setText(text[2])
+        except:
+            self.error_dialog = QtWidgets.QErrorMessage()
+            self.error_dialog.showMessage('You have not selected a valid file.')
+            self.update_date.setDate(QDate(2001, 12,19))
+            self.update_time.setTime(QTime(13, 37))
+            self.update_text.setText("Please select a valid file.")
 
     def update_mnemo(self):
-        pass
+        if(self.update_file == ""):
+            self.error_dialog = QtWidgets.QErrorMessage()
+            self.error_dialog.showMessage('You have not selected a file.')
+        else:
+            os.remove(self.update_file)
+            self.update_file=""
+            date= self.update_date.text()
+            time= self.update_time.text()
+            notification= self.update_text.toPlainText()
+            if date == "" or time == "" or notification == "":
+                self.error_dialog = QtWidgets.QErrorMessage()
+                self.error_dialog.showMessage('You cannot provide empty values.')
+            else:
+                self.update_date.setDate(QDate(2001, 12,19))
+                self.update_time.setTime(QTime(13, 37))
+                self.update_text.setText("Your Mnemo has been updated!")
+                text = str(date+ self.demarcation+ time+ self.demarcation+ notification)
+                name = str(date)+"_"+str(time.replace(":","-"))
+                path=str(os.path.join(os.path.dirname(__file__), ''))
+                path = path+"Mnemos\\"+name+'.text'
+                path= path.replace("\\","/")
+                with open(path, 'w') as f:
+                    f.write(text)
+                    f.close()
+        
         
 if __name__ == "__main__":
     import sys

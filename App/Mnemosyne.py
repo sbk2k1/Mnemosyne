@@ -331,6 +331,11 @@ class Ui_MainWindow(object):
         self.update_select.clicked.connect(lambda: self.select_file())
         self.update_save.clicked.connect(lambda: self.update_mnemo())
 
+        #3
+
+        self.delete_select.clicked.connect(lambda: self.select_files())
+        self.delete_delete.clicked.connect(lambda: self.delete_mnemo())
+
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
 
@@ -368,7 +373,7 @@ class Ui_MainWindow(object):
             text = str(date+ self.demarcation+ time+ self.demarcation+ notification)
             name = str(date)+"_"+str(time.replace(":","-"))
             path=str(os.path.join(os.path.dirname(__file__), ''))
-            path = path+"Mnemos\\"+name+'.text'
+            path = path+"Mnemos\\"+name+'.txt'
             path= path.replace("\\","/")
             with open(path, 'w') as f:
                 f.write(text)
@@ -417,12 +422,35 @@ class Ui_MainWindow(object):
                 text = str(date+ self.demarcation+ time+ self.demarcation+ notification)
                 name = str(date)+"_"+str(time.replace(":","-"))
                 path=str(os.path.join(os.path.dirname(__file__), ''))
-                path = path+"Mnemos\\"+name+'.text'
+                path = path+"Mnemos\\"+name+'.txt'
                 path= path.replace("\\","/")
                 with open(path, 'w') as f:
                     f.write(text)
                     f.close()
         
+    def select_files(self):
+        try:
+            path=str(os.path.join(os.path.dirname(__file__), ''))
+            path = path+"Mnemos"
+            path= path.replace("\\","/")
+            filename= QtWidgets.QFileDialog.getOpenFileNames(directory=path, filter="All files (*.*);;Text files (.txt)")
+            filename=list(filename[0])
+            readme_path=path+"/Readme.txt"
+            readme_path= readme_path[:1].upper()+readme_path[1:]
+            if(readme_path in filename):
+                filename.remove(readme_path)
+            self.delete_selected.setText(str(len(filename))+" Item(s) Selected")
+            self.delete_files=filename
+        except:
+            self.error_dialog = QtWidgets.QErrorMessage()
+            self.error_dialog.showMessage('One or more of the selected files are invalid. \n Pssst, don\'t try to delete the readme file.')
+
+    def delete_mnemo(self):
+        for files in self.delete_files:
+            os.remove(files)
+        self.delete_files=[]
+        self.delete_selected.setText("0 Items Selected")
+
         
 if __name__ == "__main__":
     import sys

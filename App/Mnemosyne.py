@@ -349,6 +349,22 @@ class Ui_MainWindow(object):
         scheduler.add_job(self.check_for_notification, 'interval', seconds=1)
         scheduler.start()
 
+        #tray
+        tray = QtWidgets.QSystemTrayIcon()
+        tray.setIcon(QIcon('images/Icon.ico'))
+        tray.setVisible(True)
+        tray.activated.connect(self.tray_activated)
+
+        # add context menu to tray icon
+        tray_menu = QtWidgets.QMenu()
+        tray_menu.addAction('Show', self.show_window)
+        tray_menu.addAction('Exit', self.close_window)
+        tray.setContextMenu(tray_menu)
+
+
+
+
+
 
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
@@ -358,6 +374,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", " Mnemosyne"))
+        MainWindow.setWindowFlags(QtCore.Qt.Sheet)
+
         # MainWindow.setWindowIcon(QtGui.QIcon('./images/Logo.png'))
         self.label_2.setText(_translate("MainWindow", "Welcome to"))
         self.label_3.setText(_translate("MainWindow", "Mnemosyne."))
@@ -374,6 +392,16 @@ class Ui_MainWindow(object):
         self.upate_btn.setText(_translate("MainWindow", "Update"))
         self.delete_btn.setText(_translate("MainWindow", "Delete"))
 
+    def tray_activated(self, reason):
+        if reason == QtWidgets.QSystemTrayIcon.Trigger:
+            print("tray activated")
+        elif reason == QtWidgets.QSystemTrayIcon.DoubleClick:
+            MainWindow.show()
+    
+    def show_window(self):
+        MainWindow.show()
+        
+
     def check_for_notification(self):
         current_timedate = datetime.now().strftime("%d-%m-%Y_%H-%M")
         current_timedate= current_timedate+".txt"
@@ -387,6 +415,9 @@ class Ui_MainWindow(object):
                 f.close()
             self.notify_user(data.split(self.demarcation)[2])
             os.remove(path)
+
+    def close_window(self):
+        MainWindow.quit()
 
     def notify_user(self, data):
         notification.notify(

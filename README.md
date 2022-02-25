@@ -39,7 +39,7 @@ Step 3:
 
 #### Why isn't the Desktop Notification showing up?
 
-Answer: Please enable Desktop Notifications on your system. If you want to know how to do it, you can refer to this [Support Document](https://support.microsoft.com/en-us/windows/change-notification-and-quick-settings-in-windows-ddcbbcd4-0a02-f6e4-fe14-6766d850f294) from Microsoft.
+Answer: Please enable Desktop Notifications on your system. If you want to know how to do it, you can refer to this [Support Thread](https://support.microsoft.com/en-us/windows/change-notification-and-quick-settings-in-windows-ddcbbcd4-0a02-f6e4-fe14-6766d850f294) from Microsoft.
 
 
 

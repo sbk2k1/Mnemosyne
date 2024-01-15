@@ -32,7 +32,10 @@ Step 3:
 
 ![App Screenshot](https://github.com/sbk2k1/Mnemosyne/blob/master/screenshots/Files.png)
 
+## Video
 
+[<img src="https://img.youtube.com/vi/ZYdpt764qrY/hqdefault.jpg" 
+/>](https://youtu.be/ZYdpt764qrY)
 
 
 ## FAQ
